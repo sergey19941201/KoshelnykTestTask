@@ -9,45 +9,85 @@ namespace KoshelnykTestTask
 {
     public partial class MainPage : ContentPage
     {
+
         // Dictionary to get Color from color name.
         Dictionary<string, Color> nameToColor = new Dictionary<string, Color>
         {
             { "Aqua", Color.Aqua }, { "Black", Color.Black },
             { "Gray", Color.Gray }, { "Green", Color.Green },
             { "Lime", Color.Lime }, { "Maroon", Color.Maroon },
-            { "Navy", Color.Navy }, { "Olive", Color.Olive },
-            { "Purple", Color.Purple }, { "Red", Color.Red },
-            { "Silver", Color.Silver }, { "Teal", Color.Teal },
-            { "White", Color.White }, { "Yellow", Color.Yellow }
         };
+
 
         public MainPage()
         {
             Label header = new Label
             {
-                Text = "Picker",
+                Text = "Заполните бланк",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 TextColor = Color.Blue
             };
 
-            Entry entry = new Entry()
+            ActivityIndicator actInd = new ActivityIndicator()
             {
-                Placeholder = "Password",
-                IsPassword = true
+                Color = Color.Lime,
+                IsRunning = true
             };
 
-            Entry entry1 = new Entry()
+            Button myButton = new Button()
             {
-                Placeholder = "Username"
+                TextColor = Color.Green,
+                Text = "Выполнить",
+                FontSize = 22
             };
 
-            Picker EditText = new Picker
+            Entry nameEntry = new Entry()
+            {
+                Placeholder = "Имя",
+            };
+
+            Entry surnameEntry = new Entry()
+            {
+                Placeholder = "Фамилия"
+            };
+
+            SearchBar countrySearchBar = new SearchBar()
+            {
+                Placeholder = "Страна",
+                SearchCommand = new Command(() =>
+                {
+                    //surnameEntry.Text = "sdsd";
+                })
+            };
+
+            countrySearchBar.TextChanged += delegate
+            {
+                countrySearchBar.Text = "sdsd";
+            };
+
+            SearchBar townSearchBar = new SearchBar()
+            {
+                Placeholder = "Город",
+                SearchCommand = new Command(() =>
+                {
+                })
+            };
+
+            SearchBar universitySearchBar = new SearchBar()
+            {
+                Placeholder = "Университет",
+                SearchCommand = new Command(() =>
+                {
+                })
+            };
+            
+            /*Picker EditText = new Picker
             {
                 Title = "Color",
                 VerticalOptions = LayoutOptions.CenterAndExpand
-            };
+            };*/
 
             Picker picker = new Picker
             {
@@ -91,19 +131,61 @@ namespace KoshelnykTestTask
             // Build the page.
             this.Content = new StackLayout
             {
-                Children =
+
+
+
+
+            Children =
                 {
                     header,
-                    EditText,
-                    entry,
-                    entry1,
+                    //EditText,
+                    nameEntry,
+                    surnameEntry,
+                    countrySearchBar,
+                    townSearchBar,
+                    universitySearchBar,
+                    actInd,
+                    myButton,
                     picker,
                     boxView
                 }
             };
+            /*this.Content = new StackLayout
+            {
+                Children =
+                {
+                    header,
+                    //EditText,
+                    /*nameEntry,
+                    surnameEntry,
+                    picker,
+                    boxView
+                }
+            };*/
 
         }
 
+
+        /*private void MySearchBarOnTextChanged(object sender, TextChangedEventArgs textChangedEventArgs)
+        {
+            // Has Backspace or Cancel has been pressed?
+            if (textChangedEventArgs.NewTextValue == string.Empty)
+            {
+                // Yes, which one?
+                if (textChangedEventArgs.OldTextValue.Length > 1)
+                {
+                    // Cancel has most probably been pressed
+                    //Debug.WriteLine("Cancel Pressed");
+                }
+                else
+                {
+                    // Backspace pressed on single character
+                    // Cancel pressed on single character
+                    //Debug.WriteLine("Backspace or Cancel Pressed");
+                }
+            }
+
+        }*/
         View CreateLoginForm()
         {
             var usernameEntry = new Entry { Placeholder = "Username" };
