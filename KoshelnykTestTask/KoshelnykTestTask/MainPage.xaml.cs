@@ -7,8 +7,8 @@ using Xamarin.Forms;
 
 namespace KoshelnykTestTask
 {
-	public partial class MainPage : ContentPage
-	{
+    public partial class MainPage : ContentPage
+    {
         // Dictionary to get Color from color name.
         Dictionary<string, Color> nameToColor = new Dictionary<string, Color>
         {
@@ -27,7 +27,26 @@ namespace KoshelnykTestTask
             {
                 Text = "Picker",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                TextColor = Color.Blue
+            };
+
+            Entry entry = new Entry()
+            {
+                Placeholder = "Password",
+                IsPassword = true
+            };
+
+            Entry entry1 = new Entry()
+            {
+                Placeholder = "Username"
+            };
+
+            Picker EditText = new Picker
+            {
+                Title = "Color",
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             Picker picker = new Picker
@@ -66,17 +85,42 @@ namespace KoshelnykTestTask
             // Accomodate iPhone status bar.
             this.Padding = new Thickness(10, Device.OnPlatform(20, 0, 0), 10, 5);
 
+
+            CreateLoginForm();
+
             // Build the page.
             this.Content = new StackLayout
             {
                 Children =
                 {
                     header,
+                    EditText,
+                    entry,
+                    entry1,
                     picker,
                     boxView
                 }
             };
 
+        }
+
+        View CreateLoginForm()
+        {
+            var usernameEntry = new Entry { Placeholder = "Username" };
+            var passwordEntry = new Entry
+            {
+                Placeholder = "Password",
+                IsPassword = true
+            };
+
+            return new StackLayout
+            {
+                Children =
+                {
+                    usernameEntry,
+                    passwordEntry
+                }
+            };
         }
     }
 }
