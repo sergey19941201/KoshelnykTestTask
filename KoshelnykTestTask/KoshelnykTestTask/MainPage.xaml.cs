@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Android.Net;
 using Xamarin.Forms;
 
 namespace KoshelnykTestTask
@@ -17,7 +18,6 @@ namespace KoshelnykTestTask
             { "Gray", Color.Gray }, { "Green", Color.Green },
             { "Lime", Color.Lime }, { "Maroon", Color.Maroon },
         };
-
 
         public MainPage()
         {
@@ -52,18 +52,19 @@ namespace KoshelnykTestTask
             {
                 Placeholder = "Фамилия"
             };
-
+            
             SearchBar countrySearchBar = new SearchBar()
             {
                 Placeholder = "Страна",
                 SearchCommand = new Command(() =>
                 {
-                    //surnameEntry.Text = "sdsd";
+                    
                 })
             };
 
             countrySearchBar.TextChanged += delegate
             {
+                getCountry();
                 countrySearchBar.Text = "sdsd";
             };
 
@@ -186,6 +187,14 @@ namespace KoshelnykTestTask
             }
 
         }*/
+
+        private async Task<bool> getCountry()
+        {
+            GettingCountry gettingCountry = new GettingCountry();
+            await gettingCountry.FetchAsync();
+            return true;
+        }
+
         View CreateLoginForm()
         {
             var usernameEntry = new Entry { Placeholder = "Username" };
