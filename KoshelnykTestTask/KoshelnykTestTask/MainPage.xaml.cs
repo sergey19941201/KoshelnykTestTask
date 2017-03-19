@@ -21,6 +21,7 @@ namespace KoshelnykTestTask
 
         public MainPage()
         {
+            //BindingContext = new GettingCountry();
             Label header = new Label
             {
                 Text = "Заполните бланк",
@@ -64,7 +65,7 @@ namespace KoshelnykTestTask
 
             countrySearchBar.TextChanged += delegate
             {
-                getCountry();
+               getCountry();
                 countrySearchBar.Text = "sdsd";
             };
 
@@ -132,10 +133,6 @@ namespace KoshelnykTestTask
             // Build the page.
             this.Content = new StackLayout
             {
-
-
-
-
             Children =
                 {
                     header,
@@ -190,10 +187,14 @@ namespace KoshelnykTestTask
 
         private async Task<bool> getCountry()
         {
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
             GettingCountry gettingCountry = new GettingCountry();
-            await gettingCountry.FetchAsync();
+            //gettingCountry.Download(url);
+            await gettingCountry.FetchAsync(url);
             return true;
         }
+
+          
 
         View CreateLoginForm()
         {
