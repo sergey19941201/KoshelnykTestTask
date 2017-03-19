@@ -13,7 +13,7 @@ namespace KoshelnykTestTask
 		{
 			InitializeComponent();
 
-			MainPage = new KoshelnykTestTask.MainPage();
+			MainPage = new NavigationPage(new KoshelnykTestTask.MainPage());
 		}
 
 		protected override void OnStart ()

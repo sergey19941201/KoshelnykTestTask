@@ -29,6 +29,8 @@ namespace KoshelnykTestTask
     public class GettingCountry
     {
         public List<string> CountriesList = new List<string>();
+
+        MainPage mainPage = new MainPage();
         public async Task<List<RootObject>> FetchAsync(string url)
         {
             string jsonString;
@@ -49,6 +51,8 @@ namespace KoshelnykTestTask
 
                 CountriesList.Add(rootObject.Title);
             }
+
+            mainPage.StartFillingPage();
 
             return listOfCountries;
         }
