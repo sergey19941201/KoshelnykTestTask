@@ -28,7 +28,8 @@ namespace KoshelnykTestTask
 {
     public class GettingCountry
     {
-        public async Task<RootObject> FetchAsync(string url)
+        public List<string> CountriesList = new List<string>();
+        public async Task<List<RootObject>> FetchAsync(string url)
         {
             string jsonString;
             using (var httpClient = new System.Net.Http.HttpClient())
@@ -38,12 +39,18 @@ namespace KoshelnykTestTask
                 jsonString = reader.ReadToEnd();
             }
 
-            var readJson = JObject.Parse(jsonString);
-            string countryName = readJson["response"]["items"].ToString();
+            var listOfCountries = new List<RootObject>();
 
-            var deserialized = JsonConvert.DeserializeObject<RootObject>(jsonString);
+            var responseCountries = JArray.Parse(JObject.Parse(jsonString)["response"]["items"].ToString());
 
-            return deserialized;
+            foreach (var countryInResponse in responseCountries)
+            {
+                var rootObject = new RootObject((int)countryInResponse["id"], (string)countryInResponse["title"]);
+
+                CountriesList.Add(rootObject.Title);
+            }
+
+            return listOfCountries;
         }
     }
 }
