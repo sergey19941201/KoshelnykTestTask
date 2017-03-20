@@ -18,10 +18,19 @@ namespace KoshelnykTestTask
 
 		protected override void OnStart ()
 		{
-			// Handle when your app starts
+            // Handle when your app starts
+		    getCountry();
 		}
 
-		protected override void OnSleep ()
+
+        private async void getCountry()
+        {
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
+            GettingCountry gettingCountry = new GettingCountry();
+            await gettingCountry.FetchAsync(url);
+        }
+
+        protected override void OnSleep ()
 		{
 			// Handle when your app sleeps
 		}
