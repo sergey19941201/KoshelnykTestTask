@@ -3,9 +3,9 @@ using Xamarin.Forms.Xaml;
 
 namespace KoshelnykTestTask
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class FillingPage : ContentPage
-	{
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class FillingPage : ContentPage
+    {
         public FillingPage()
         {
             Label header = new Label
@@ -38,12 +38,18 @@ namespace KoshelnykTestTask
                 countryPicker.Items.Add(country);
             }
 
-            SearchBar townSearchBar = new SearchBar()
+            SearchBar citySearchBar = new SearchBar()
             {
                 Placeholder = "Город",
                 SearchCommand = new Command(() =>
                 {
                 })
+            };
+
+            ListView listView = new ListView
+            {
+                // Source of data items.
+                //ItemsSource = GettingCountry.CountriesList
             };
 
             SearchBar universitySearchBar = new SearchBar()
@@ -55,11 +61,11 @@ namespace KoshelnykTestTask
             };
 
             Button myButton = new Button()
-           {
-               TextColor = Color.Green,
-               Text = "Выполнить",
-               FontSize = 22
-           };
+            {
+                TextColor = Color.Green,
+                Text = "Выполнить",
+                FontSize = 22
+            };
 
             // Accomodate iPhone status bar.
             this.Padding = new Thickness(10, Device.OnPlatform(20, 0, 0), 10, 5);
@@ -73,8 +79,9 @@ namespace KoshelnykTestTask
                     nameEntry,
                     surnameEntry,
                     countryPicker,
-                    townSearchBar,
+                    citySearchBar,
                     universitySearchBar,
+                    listView,
                     myButton
                 }
             };
