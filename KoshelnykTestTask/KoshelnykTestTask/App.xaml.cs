@@ -12,22 +12,22 @@ namespace KoshelnykTestTask
 		public App ()
 		{
 			InitializeComponent();
-
-			MainPage = new NavigationPage(new KoshelnykTestTask.MainPage());
+            
+            MainPage = new NavigationPage(new KoshelnykTestTask.MainPage());
 		}
 
-		protected override void OnStart ()
+        protected override void OnStart ()
 		{
             // Handle when your app starts
-		    getCountry();
+		   getCountry();
 		}
-
 
         private async void getCountry()
         {
             var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
             GettingCountry gettingCountry = new GettingCountry();
             await gettingCountry.FetchAsync(url);
+            await MainPage.Navigation.PushAsync(new FillingPage());
         }
 
         protected override void OnSleep ()
