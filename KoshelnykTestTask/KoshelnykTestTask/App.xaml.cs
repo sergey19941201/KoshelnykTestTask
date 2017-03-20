@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace KoshelnykTestTask
 {
@@ -12,16 +7,17 @@ namespace KoshelnykTestTask
 		public App ()
 		{
 			InitializeComponent();
-            
+            //setting the MainPage
             MainPage = new NavigationPage(new KoshelnykTestTask.MainPage());
 		}
 
         protected override void OnStart ()
 		{
-            // Handle when your app starts
 		   getCountry();
 		}
 
+        /*In this async method gettingCountry.FetchAsync(url) is called for retrieving data
+        and when it gets all the data, FillingPage() starts*/
         private async void getCountry()
         {
             var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
@@ -29,15 +25,5 @@ namespace KoshelnykTestTask
             await gettingCountry.FetchAsync(url);
             await MainPage.Navigation.PushAsync(new FillingPage());
         }
-
-        protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
-
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
 	}
 }

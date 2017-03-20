@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace KoshelnykTestTask
@@ -12,10 +6,8 @@ namespace KoshelnykTestTask
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class FillingPage : ContentPage
 	{
-        public FillingPage ()//List<List<RootObject>> countryL
+        public FillingPage()
         {
-            GettingCountry gettingCountry = new GettingCountry();
-
             Label header = new Label
             {
                 Text = "Заполните бланк",
@@ -38,7 +30,7 @@ namespace KoshelnykTestTask
             Picker countryPicker = new Picker()
             {
                 Title = "Страна",
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                VerticalOptions = LayoutOptions.Center
             };
 
             foreach (string country in GettingCountry.CountriesList)
