@@ -2,14 +2,14 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
-using Android.App;
+/*using Android.App;
 using Android.Content;
 using Java.IO;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
+using System;*/
 using System.Collections.Generic;
-using System.ComponentModel;
+/*using System.ComponentModel;
 using System.IO;
 using System.Json;
 using System.Linq;
@@ -19,16 +19,19 @@ using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
 using System.Text;
-using System.Threading.Tasks;
-using Java.Security;
-using Javax.Security.Auth;
+using System.Threading.Tasks;*/
+using Android.Content.Res;
 using Xamarin.Forms;
+
+/*using Java.Security;
+using Javax.Security.Auth;
+using Xamarin.Forms;*/
 
 namespace KoshelnykTestTask
 {
-    public class GettingCountry
+    public class GettingCountry : ContentPage
     {
-        public List<string> CountriesList = new List<string>();
+        public static List<string> CountriesList = new List<string>();
 
         MainPage mainPage = new MainPage();
         public async Task<List<RootObject>> FetchAsync(string url)
@@ -50,11 +53,19 @@ namespace KoshelnykTestTask
                 var rootObject = new RootObject((int)countryInResponse["id"], (string)countryInResponse["title"]);
 
                 CountriesList.Add(rootObject.Title);
+                //listOfCountries.Add(rootObject);
             }
 
-            mainPage.StartFillingPage();
+            //mainPage.StartFillingPage();
+            //await Navigation.PushAsync(new FillingPage());
 
             return listOfCountries;
         }
+
+        /*public async Task<bool> StartFillingPage()
+        {
+            await Navigation.PushAsync(new FillingPage());
+            return true;
+        }*/
     }
 }

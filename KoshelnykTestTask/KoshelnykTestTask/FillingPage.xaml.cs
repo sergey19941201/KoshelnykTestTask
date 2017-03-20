@@ -43,19 +43,18 @@ namespace KoshelnykTestTask
                 Placeholder = "Фамилия"
             };
 
-            SearchBar countrySearchBar = new SearchBar()
+            Picker countryPicker = new Picker()
             {
-                Placeholder = "Страна",
-                SearchCommand = new Command(() =>
-                {
-
-                })
+                Title = "Страна",
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
-            countrySearchBar.TextChanged += delegate
+            //GettingCountry getting_Country = new GettingCountry();
+
+            foreach (string country in GettingCountry.CountriesList)
             {
-                countrySearchBar.Text = "sdsd";
-            };
+                countryPicker.Items.Add(country);
+            }
 
             SearchBar townSearchBar = new SearchBar()
             {
@@ -98,7 +97,7 @@ namespace KoshelnykTestTask
                 picker.Items.Add(colorName);
             }*/
 
-            Picker picker = new Picker
+            /*Picker picker = new Picker
             {
                 Title = "myPicker",
                 VerticalOptions = LayoutOptions.CenterAndExpand
@@ -146,11 +145,11 @@ namespace KoshelnykTestTask
                     //EditText,
                     nameEntry,
                     surnameEntry,
-                    countrySearchBar,
+                    countryPicker,
                     townSearchBar,
                     universitySearchBar,
                     myButton,
-                    picker,
+                    //picker,
                     //boxView
                 }
             };
