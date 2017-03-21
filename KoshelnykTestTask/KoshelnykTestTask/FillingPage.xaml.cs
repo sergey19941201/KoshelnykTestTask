@@ -9,10 +9,13 @@ namespace KoshelnykTestTask
     {
         public static string chosenCountryTitle;//we need to know the title of chosen country to find countryId
         private int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
+        private ListView listView = new ListView();//"drop-down" listview to choose cities or universities
+        private string partOfWord;//this string is used to get cities or universities by the part of its title
+
+        GettingCountry gettingCountry = new GettingCountry();
+        GettingCity gettingCity = new GettingCity();
         public FillingPage()
         {
-            GettingCountry gettingCountry = new GettingCountry();
-
             Label header = new Label
             {
                 Text = "Заполните бланк",
@@ -54,7 +57,7 @@ namespace KoshelnykTestTask
                 //countryPicker.Items.Add(country);
             }*/
 
-            ListView listView = new ListView();
+            
             /*{
                 // Source of data items.
                 //ItemsSource = GettingCountry.CountriesList
@@ -118,9 +121,10 @@ namespace KoshelnykTestTask
 
         private async void getCity()
         {
-            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id="+ selectedCountryId;
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id="+ selectedCountryId;//need_all=0 that means that we get only main cities
             GettingCity gettingCity = new GettingCity();
             await gettingCity.FetchAsync(url);
+            listView.ItemsSource = gettingCity.listOfCities;
             //await MainPage.Navigation.PushAsync(new FillingPage());
         }
     }

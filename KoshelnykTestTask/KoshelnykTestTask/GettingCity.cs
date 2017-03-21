@@ -8,7 +8,8 @@ namespace KoshelnykTestTask
 {
     public class GettingCity : ContentPage
     {
-        public static List<RootObject> listOfCities = new List<RootObject>();//This List contains Id and Titles of cities
+        public static List<RootObject> listOfCitiesRoot = new List<RootObject>();//This List contains Id and Titles of cities
+        public List<string> listOfCities = new List<string>();//list with names of the cities
         private string jsonString; //string for getting data from the url
         public async Task<List<RootObject>> FetchAsync(string url)
         {
@@ -25,15 +26,16 @@ namespace KoshelnykTestTask
             foreach (var cityInResponse in responseCities)//the foreach-loop
             {
                 var rootObject = new RootObject((int)cityInResponse["cid"],(string)cityInResponse["title"]);
-                listOfCities.Add(rootObject);//here the program adds Id and Title of each city to the list
+                listOfCitiesRoot.Add(rootObject);//here the program adds Id and Title of each city to the list
+                listOfCities.Add(rootObject.Title);//adding to the list with names of the cities
             }
             
-            return listOfCities;//returned list
+            return listOfCitiesRoot;//returned list
         }
 
         public int retrievingChoosenCityId()
         {
-            foreach (var item in listOfCities)
+            foreach (var item in listOfCitiesRoot)
             {
                 /*if (item.Title == FillingPage.chosenCountryTitle)
                 {
