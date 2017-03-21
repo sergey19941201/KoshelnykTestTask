@@ -30,5 +30,17 @@ namespace KoshelnykTestTask
             
             return listOfCountries;//returned value
         }
+
+        public int retrievingChoosenCountryId()
+        {
+            foreach (var item in listOfCountries)
+            {
+                if (item.Title == FillingPage.chosenCountryTitle)
+                {
+                    return item.Id;
+                }
+            };
+            return 0;
+        }
     }
 }

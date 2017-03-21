@@ -7,8 +7,12 @@ namespace KoshelnykTestTask
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FillingPage : ContentPage
     {
+        public static string chosenCountryTitle;//we need to know the title of chosen country to find countryId
+        private int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
         public FillingPage()
         {
+            GettingCountry gettingCountry = new GettingCountry();
+
             Label header = new Label
             {
                 Text = "Заполните бланк",
@@ -32,13 +36,12 @@ namespace KoshelnykTestTask
             {
                 Title = "Страна",
                 VerticalOptions = LayoutOptions.Center,
-                //SelectedIndex = 1
-                
             };
 
             countryPicker.SelectedIndexChanged += (sender, args) =>
             {
-                string colorName = countryPicker.Items[countryPicker.SelectedIndex];
+                chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
+                selectedCountryId=gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all cities of it 
             };
 
             foreach (var country in GettingCountry.listOfCountries)
