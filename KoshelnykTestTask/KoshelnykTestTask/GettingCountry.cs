@@ -8,14 +8,10 @@ namespace KoshelnykTestTask
 {
     public class GettingCountry : ContentPage
     {
-        //this List<string> will be displayed in countryPicker
-        public static List<string> CountriesList = new List<string>();
-        
-        //This List contains Id and Titles of all countries
+        public static List<RootObject> listOfCountries = new List<RootObject>();//This List contains Id and Titles of all countries
         public async Task<List<RootObject>> FetchAsync(string url)
         {
-            //string for getting data from the url
-            string jsonString;
+            string jsonString; //string for getting data from the url
             //getting data process goes here
             using (var httpClient = new System.Net.Http.HttpClient())
             {
@@ -23,19 +19,16 @@ namespace KoshelnykTestTask
                 StreamReader reader = new StreamReader(stream);
                 jsonString = reader.ReadToEnd();
             }
-            //declaring the List that will be returned
-            var listOfCountries = new List<RootObject>();
-            //parsing data from jsonstring
-            var responseCountries = JArray.Parse(JObject.Parse(jsonString)["response"]["items"].ToString());
-            //the foreach-loop
-            foreach (var countryInResponse in responseCountries)
+            
+            var responseCountries = JArray.Parse(JObject.Parse(jsonString)["response"]["items"].ToString());//parsing data from jsonstring
+
+            foreach (var countryInResponse in responseCountries)//the foreach-loop
             {
                 var rootObject = new RootObject((int)countryInResponse["id"], (string)countryInResponse["title"]);
-                //here the program adds the name of each country to the list
-                CountriesList.Add(rootObject.Title);
+                listOfCountries.Add(rootObject);//here the program adds Id and Title of each country to the list
             }
-            //returned value
-            return listOfCountries;
+            
+            return listOfCountries;//returned value
         }
     }
 }

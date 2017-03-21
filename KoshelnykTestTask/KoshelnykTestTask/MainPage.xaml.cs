@@ -6,8 +6,7 @@ namespace KoshelnykTestTask
     {
         public MainPage()
         {
-            //header
-            Label header = new Label
+            Label header = new Label //header
             {
                 //setting properties:
                 Text = "Выполняется загрузка стран",
@@ -17,16 +16,14 @@ namespace KoshelnykTestTask
                 HorizontalTextAlignment = TextAlignment.Center,
                 TextColor = Color.Blue
             };
-            //ActivityIndicator
-            ActivityIndicator actInd = new ActivityIndicator()
+            
+            ActivityIndicator actInd = new ActivityIndicator()//ActivityIndicator
             {
-                //setting color
-                Color = Color.Lime,
-                //setting running property
-                IsRunning = true
+               Color = Color.Lime, //setting color
+               IsRunning = true //setting running property
             };
-            //Building the page
-            this.Content = new StackLayout
+            
+            this.Content = new StackLayout //Building the page
             {
                 //adding header and activity indicator as a children to StackLayout
                 Children =

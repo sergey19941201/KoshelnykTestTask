@@ -7,8 +7,8 @@ namespace KoshelnykTestTask
     //Here I have set properties for FetchAsync(string url)
     public class RootObject
     {
-        public int Id { get; }
-        public string Title { get; }
+        public int Id { get; set; }
+        public string Title { get; set; }
         public RootObject(int countryId, string countryTitle)
         {
             this.Id = countryId;

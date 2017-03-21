@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.Runtime.Remoting.Channels;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace KoshelnykTestTask
@@ -30,41 +31,65 @@ namespace KoshelnykTestTask
             Picker countryPicker = new Picker()
             {
                 Title = "Страна",
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.Center,
+                //SelectedIndex = 1
+                
             };
 
-            foreach (string country in GettingCountry.CountriesList)
+            countryPicker.SelectedIndexChanged += (sender, args) =>
             {
-                countryPicker.Items.Add(country);
+                string colorName = countryPicker.Items[countryPicker.SelectedIndex];
+            };
+
+            foreach (var country in GettingCountry.listOfCountries)
+            {
+                countryPicker.Items.Add(country.Title);
             }
+
+            /*foreach (string country in GettingCountry.CountriesList)
+            {
+                //countryPicker.Items.Add(country);
+            }*/
+
+            ListView listView = new ListView();
+            /*{
+                // Source of data items.
+                //ItemsSource = GettingCountry.CountriesList
+
+            };*/
+            listView.ItemSelected += //async
+                (sender, e) =>
+                {
+                    //FillingPage itm = (FillingPage)e.SelectedItem;
+                    if (e.SelectedItem == null) return; // don't do anything if we just de-selected the row
+                    var n = e.SelectedItem;
+                ((ListView)sender).SelectedItem = null; // de-select the row
+            };
 
             SearchBar citySearchBar = new SearchBar()
             {
-                Placeholder = "Город",
-                SearchCommand = new Command(() =>
-                {
-                })
+                Placeholder = "Город"
             };
 
-            ListView listView = new ListView
+            citySearchBar.TextChanged += delegate
             {
-                // Source of data items.
-                //ItemsSource = GettingCountry.CountriesList
+                listView.ItemsSource = GettingCountry.listOfCountries;
             };
 
             SearchBar universitySearchBar = new SearchBar()
             {
-                Placeholder = "Университет",
-                SearchCommand = new Command(() =>
-                {
-                })
+                Placeholder = "Университет"
             };
 
-            Button myButton = new Button()
+            Button executeButton = new Button()
             {
                 TextColor = Color.Green,
                 Text = "Выполнить",
                 FontSize = 22
+            };
+
+            executeButton.Clicked += delegate
+            {
             };
 
             // Accomodate iPhone status bar.
@@ -82,7 +107,7 @@ namespace KoshelnykTestTask
                     citySearchBar,
                     universitySearchBar,
                     listView,
-                    myButton
+                    executeButton
                 }
             };
         }
