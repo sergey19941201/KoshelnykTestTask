@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace KoshelnykTestTask
 {
-    public class GettingUniversity : ContentPage
+    public class GettingUniversity
     {
         public static List<RootObject> listOfUniversitiesRoot = new List<RootObject>();//This List contains Id and Titles of universities
         public List<string> listOfUniversities = new List<string>();//list with names of the universities
@@ -20,16 +20,18 @@ namespace KoshelnykTestTask
                 StreamReader reader = new StreamReader(stream);
                 jsonString = reader.ReadToEnd();
             }
-            
+
             var responseUniversities = JArray.Parse(JObject.Parse(jsonString)["response"].ToString());//parsing data from jsonstring
 
             foreach (var universityInResponse in responseUniversities)//the foreach-loop
             {
-                var rootObject = new RootObject((int)universityInResponse["id"],(string)universityInResponse["title"]);
-                listOfUniversities.Add(rootObject.Title);//adding to the list with names of the universities
+                var universityRepository = new RootObject((int)universityInResponse["id"], (string)universityInResponse["title"]);
+                //listOfUniversitiesRoot.Add(universityRepository);//adding to the list with names of the universities
+                //listOfUniversities.Add(universityRepository.Title);
             }
-            
+
             return listOfUniversitiesRoot;//returned list
         }
     }
 }
+

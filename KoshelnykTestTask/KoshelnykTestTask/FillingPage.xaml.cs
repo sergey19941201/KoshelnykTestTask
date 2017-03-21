@@ -7,37 +7,36 @@ namespace KoshelnykTestTask
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FillingPage : ContentPage
     {
+        public static string name;
+        public static string surname;
         public static string chosenCountryTitle;//variable to know the title of chosen country to find countryId
         public static string chosenCityTitle;//variable to know the title of chosen city to find university
         private int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
         private int selectedCityId;//this variable is used to find universities of the city that had been chosen before
         private ListView listView = new ListView();//"drop-down" listview to choose cities or universities
         private string partOfWord;//this string is used to get cities or universities by the part of its title
-        private string chooseCityOrUniversityIndicator;//Variable indicates if the user enters city or university now
+        public static string university;
 
         GettingCountry gettingCountry = new GettingCountry();
         GettingCity gettingCity = new GettingCity();
         GettingUniversity gettingUniversity = new GettingUniversity();
+
+        private Entry nameEntry = new Entry();
+        private Entry surnameEntry = new Entry();
+
         public FillingPage()
         {
             Label header = new Label
             {
                 Text = "Заполните бланк",
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                FontSize = 26,
                 HorizontalOptions = LayoutOptions.Center,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 TextColor = Color.Blue
             };
 
-            Entry nameEntry = new Entry()
-            {
-                Placeholder = "Имя",
-            };
-
-            Entry surnameEntry = new Entry()
-            {
-                Placeholder = "Фамилия"
-            };
+            nameEntry.Placeholder = "Имя";
+            surnameEntry.Placeholder = "Фамилия";
 
             Picker countryPicker = new Picker()
             {
@@ -50,26 +49,23 @@ namespace KoshelnykTestTask
                 Placeholder = "Город"
             };
 
-            SearchBar universitySearchBar = new SearchBar()
-            {
-                Placeholder = "Университет"
-            };
-
             citySearchBar.TextChanged += delegate
             {
                 //listView.ItemsSource = GettingCountry.listOfCountries;
-                chooseCityOrUniversityIndicator = "city";
-                universitySearchBar.Text = "";
+
                 partOfWord = citySearchBar.Text;
                 getCity();
+            };
+
+            SearchBar universitySearchBar = new SearchBar()
+            {
+                Placeholder = "Университет"
             };
 
             countryPicker.SelectedIndexChanged += (sender, args) =>
             {
                 chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
                 selectedCountryId = gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all the cities of it 
-                universitySearchBar.Text = "";
-                citySearchBar.Text = "";
             };
 
             foreach (var country in GettingCountry.listOfCountries)
@@ -107,9 +103,13 @@ namespace KoshelnykTestTask
                 FontSize = 22
             };
 
-            executeButton.Clicked += delegate
-            {
-            };
+            executeButton.Clicked += async delegate
+             {
+                 //getUniversityTask();
+                 name = nameEntry.Text;
+                 surname = surnameEntry.Text;
+                 await Navigation.PushAsync(new ResultPage());
+             };
 
             // Accomodate iPhone status bar.
             this.Padding = new Thickness(10, Device.OnPlatform(20, 0, 0), 10, 5);
@@ -138,6 +138,17 @@ namespace KoshelnykTestTask
             GettingCity gettingCity = new GettingCity();
             await gettingCity.FetchAsync(url);
             listView.ItemsSource = gettingCity.listOfCities;
+            //await MainPage.Navigation.PushAsync(new FillingPage());
+        }
+
+        private async void getUniversityTask()
+        {
+            //need_all=0 that means that we get only main cities
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getUniversities&city_id=314";// + selectedCityId;
+            //var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
+            //GettingCity gettingCity = new GettingCity();
+            await gettingUniversity.FetchAsync(url);
+            listView.ItemsSource = gettingUniversity.listOfUniversities;
             //await MainPage.Navigation.PushAsync(new FillingPage());
         }
     }

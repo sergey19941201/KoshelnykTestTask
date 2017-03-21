@@ -1,6 +1,6 @@
 ﻿namespace KoshelnykTestTask
 {
-    //Here I have set properties for FetchAsync(string url) to get countries, cities and universities
+    //Here I have set properties for FetchAsync(string url) to get countries and cities 
     public class RootObject
     {
         public int Id { get; set; }
