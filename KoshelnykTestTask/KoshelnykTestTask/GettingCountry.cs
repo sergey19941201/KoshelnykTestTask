@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace KoshelnykTestTask
 {
-    public class GettingCountry : ContentPage
+    public class GettingCountry
     {
         public static List<RootObject> listOfCountries = new List<RootObject>();//This List contains Id and Titles of all countries
         private string jsonString; //string for getting data from the url
