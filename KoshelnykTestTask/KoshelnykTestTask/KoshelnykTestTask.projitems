@@ -12,7 +12,8 @@
     <Compile Include="$(MSBuildThisFileDirectory)App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="$(MSBuildThisFileDirectory)CountryRepository.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)GettingCity.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Repository.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)FillingPage.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

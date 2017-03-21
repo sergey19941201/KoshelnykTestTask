@@ -9,9 +9,9 @@ namespace KoshelnykTestTask
     public class GettingCountry : ContentPage
     {
         public static List<RootObject> listOfCountries = new List<RootObject>();//This List contains Id and Titles of all countries
+        private string jsonString; //string for getting data from the url
         public async Task<List<RootObject>> FetchAsync(string url)
         {
-            string jsonString; //string for getting data from the url
             //getting data process goes here
             using (var httpClient = new System.Net.Http.HttpClient())
             {
@@ -28,7 +28,7 @@ namespace KoshelnykTestTask
                 listOfCountries.Add(rootObject);//here the program adds Id and Title of each country to the list
             }
             
-            return listOfCountries;//returned value
+            return listOfCountries;//returned list
         }
 
         public int retrievingChoosenCountryId()

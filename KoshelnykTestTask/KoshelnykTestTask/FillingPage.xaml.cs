@@ -76,7 +76,8 @@ namespace KoshelnykTestTask
 
             citySearchBar.TextChanged += delegate
             {
-                listView.ItemsSource = GettingCountry.listOfCountries;
+                //listView.ItemsSource = GettingCountry.listOfCountries;
+                getCity();
             };
 
             SearchBar universitySearchBar = new SearchBar()
@@ -113,6 +114,14 @@ namespace KoshelnykTestTask
                     executeButton
                 }
             };
+        }
+
+        private async void getCity()
+        {
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id="+ selectedCountryId;
+            GettingCity gettingCity = new GettingCity();
+            await gettingCity.FetchAsync(url);
+            //await MainPage.Navigation.PushAsync(new FillingPage());
         }
     }
 }
