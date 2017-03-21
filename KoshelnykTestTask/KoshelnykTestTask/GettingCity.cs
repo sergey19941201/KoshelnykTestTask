@@ -37,10 +37,10 @@ namespace KoshelnykTestTask
         {
             foreach (var item in listOfCitiesRoot)
             {
-                /*if (item.Title == FillingPage.chosenCountryTitle)
+                if (item.Title == FillingPage.chosenCityTitle)
                 {
                     return item.Id;
-                }*/
+                }
             };
             return 0;
         }

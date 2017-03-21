@@ -7,8 +7,10 @@ namespace KoshelnykTestTask
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FillingPage : ContentPage
     {
-        public static string chosenCountryTitle;//we need to know the title of chosen country to find countryId
+        public static string chosenCountryTitle;//variable to know the title of chosen country to find countryId
+        public static string chosenCityTitle;//variable to know the title of chosen city to find university
         private int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
+        private int selectedCityId;//this variable is used to find universities of the city that had been chosen before
         private ListView listView = new ListView();//"drop-down" listview to choose cities or universities
         private string partOfWord;//this string is used to get cities or universities by the part of its title
 
@@ -44,7 +46,7 @@ namespace KoshelnykTestTask
             countryPicker.SelectedIndexChanged += (sender, args) =>
             {
                 chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
-                selectedCountryId=gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all cities of it 
+                selectedCountryId = gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all the cities of it 
             };
 
             foreach (var country in GettingCountry.listOfCountries)
@@ -57,7 +59,7 @@ namespace KoshelnykTestTask
                 //countryPicker.Items.Add(country);
             }*/
 
-            
+
             /*{
                 // Source of data items.
                 //ItemsSource = GettingCountry.CountriesList
@@ -66,11 +68,11 @@ namespace KoshelnykTestTask
             listView.ItemSelected += //async
                 (sender, e) =>
                 {
-                    //FillingPage itm = (FillingPage)e.SelectedItem;
                     if (e.SelectedItem == null) return; // don't do anything if we just de-selected the row
-                    var n = e.SelectedItem;
-                ((ListView)sender).SelectedItem = null; // de-select the row
-            };
+                    chosenCityTitle = e.SelectedItem.ToString();//setting the value of chosen city
+                    selectedCityId = gettingCity.retrievingChoosenCityId();//setting the id of chosen city by calling method to find all the universities of it 
+                    ((ListView)sender).SelectedItem = null; // de-select the row
+                };
 
             SearchBar citySearchBar = new SearchBar()
             {
@@ -121,7 +123,7 @@ namespace KoshelnykTestTask
 
         private async void getCity()
         {
-            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id="+ selectedCountryId;//need_all=0 that means that we get only main cities
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id=" + selectedCountryId;//need_all=0 that means that we get only main cities
             GettingCity gettingCity = new GettingCity();
             await gettingCity.FetchAsync(url);
             listView.ItemsSource = gettingCity.listOfCities;
