@@ -14,8 +14,11 @@ namespace KoshelnykTestTask
         private int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
         private int selectedCityId;//this variable is used to find universities of the city that had been chosen before
         private ListView listView = new ListView();//"drop-down" listview to choose cities or universities
-        private string partOfWord;//this string is used to get cities or universities by the part of its title
+        //private string partOfWord;//this string is used to get cities or universities by the part of its title
         public static string university;
+        private string cityOrUniversityIndicator;
+        private SearchBar universitySearchBar = new SearchBar();
+        private SearchBar citySearchBar = new SearchBar();
 
         GettingCountry gettingCountry = new GettingCountry();
         GettingCity gettingCity = new GettingCity();
@@ -26,8 +29,8 @@ namespace KoshelnykTestTask
 
         public FillingPage()
         {
-            int selectedIndexChangedIssueFixed = 0; 
-                int selectedIndexChangedIssueFixedCityField = 0;
+            int selectedIndexChangedIssueFixed = 0;
+            int selectedIndexChangedIssueFixedCityField = 0;
 
             Label header = new Label
             {
@@ -52,6 +55,7 @@ namespace KoshelnykTestTask
                 if (String.IsNullOrEmpty(nameEntry.Text))
                 {
                     DisplayAlert("Внимание", "Введите имя", "OK");
+                    surnameEntry.Text = "";
                     selectedIndexChangedIssueFixed++;
                     selectedIndexChangedIssueFixedCityField++;
                 }
@@ -68,13 +72,11 @@ namespace KoshelnykTestTask
                 VerticalOptions = LayoutOptions.Center,
             };
 
-            SearchBar citySearchBar = new SearchBar()
-            {
-                Placeholder = "Город"
-            };
+                citySearchBar.Placeholder = "Город";
 
             citySearchBar.TextChanged += delegate
             {
+                cityOrUniversityIndicator = "city";
                 //listView.ItemsSource = GettingCountry.listOfCountries;
                 if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
                     countryPicker.SelectedIndex == -1)
@@ -88,16 +90,28 @@ namespace KoshelnykTestTask
                 }
                 else
                 {
-                    partOfWord = citySearchBar.Text;
-                    getCity();
+                   // partOfWord = citySearchBar.Text;
+                    getCityTask();
                 }
             };
 
-            SearchBar universitySearchBar = new SearchBar()
-            {
-                Placeholder = "Университет"
-            };
 
+            universitySearchBar.Placeholder = "Университет";
+
+            universitySearchBar.TextChanged += delegate
+            {
+                if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
+                    countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
+                {
+                    DisplayAlert("Внимание", "Заполните все поля выше", "OK");
+                }
+                else
+                {
+                    cityOrUniversityIndicator = "university";
+                    // partOfWord = citySearchBar.Text;
+                    getUniversityTask(); //getting the universities
+                }
+            };
 
             countryPicker.SelectedIndexChanged += (sender, args) =>
             {
@@ -137,17 +151,25 @@ namespace KoshelnykTestTask
             };*/
             listView.SeparatorColor = Color.Blue;//setting separator color
 
-           listView.ItemSelected += (sender, e) =>
-           {
-
+            listView.ItemSelected += (sender, e) =>
+            {
                if (e.SelectedItem == null) return; // don't do anything if we just de-selected the row
 
-                chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
-                selectedCityId = gettingCity.retrievingChoosenCityId();
-                //setting the id of chosen city by calling method to find all the universities of it 
-                citySearchBar.Text = e.SelectedItem.ToString();
 
-               ((ListView)sender).SelectedItem = null; // de-select the row
+                if (cityOrUniversityIndicator == "city")
+                {
+                    chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
+                    selectedCityId = gettingCity.retrievingChoosenCityId();
+                    //setting the id of chosen city by calling method to find all the universities of it 
+                    citySearchBar.Text = e.SelectedItem.ToString();
+                }
+                if (cityOrUniversityIndicator == "university")
+                {
+                    university= e.SelectedItem.ToString();
+                    universitySearchBar.Text= e.SelectedItem.ToString();
+                }
+
+                ((ListView)sender).SelectedItem = null; // de-select the row
             };
 
 
@@ -161,10 +183,10 @@ namespace KoshelnykTestTask
 
             executeButton.Clicked += async delegate
              {
-                 getUniversityTask();
+                 //getUniversityTask();
                  name = nameEntry.Text;
                  surname = surnameEntry.Text;
-                 //await Navigation.PushAsync(new ResultPage());
+                 await Navigation.PushAsync(new ResultPage());
              };
 
             // Accomodate iPhone status bar.
@@ -187,10 +209,10 @@ namespace KoshelnykTestTask
             };
         }
 
-        private async void getCity()
+        private async void getCityTask()
         {
             //need_all=0 that means that we get only main cities
-            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id=" + selectedCountryId + "&q=" + partOfWord;
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id=" + selectedCountryId + "&q=" + citySearchBar.Text;
             GettingCity gettingCity = new GettingCity();
             await gettingCity.FetchAsync(url);
             listView.ItemsSource = gettingCity.listOfCities;
@@ -200,11 +222,11 @@ namespace KoshelnykTestTask
         private async void getUniversityTask()
         {
             //need_all=0 that means that we get only main cities
-            var url = "https://api.vk.com/api.php?oauth=1&method=database.getUniversities&city_id=314";// + selectedCityId;
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getUniversities&city_id=" + selectedCityId+"&q="+ universitySearchBar.Text;
             //var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
             //GettingCity gettingCity = new GettingCity();
-            await gettingUniversity.FetchAsync(url);
-            listView.ItemsSource = gettingUniversity.listOfUniversities;
+            listView.ItemsSource = await gettingUniversity.FetchAsync(url);
+            // gettingUniversity.listOfUniversities;
             //await MainPage.Navigation.PushAsync(new FillingPage());
         }
     }

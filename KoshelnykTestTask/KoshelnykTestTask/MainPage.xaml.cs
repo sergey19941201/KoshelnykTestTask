@@ -19,7 +19,7 @@ namespace KoshelnykTestTask
             
             ActivityIndicator actInd = new ActivityIndicator()//ActivityIndicator
             {
-               Color = Color.Lime, //setting color
+               Color = Color.Blue, //setting color
                IsRunning = true //setting running property
             };
             

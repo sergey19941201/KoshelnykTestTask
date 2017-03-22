@@ -9,7 +9,7 @@ namespace KoshelnykTestTask
 {
     public class GettingUniversity
     {
-        public List<string> listOfUniversities = new List<string>();//list with names of the universities
+        public static List<string> listOfUniversities = new List<string>();//list with names of the universities
         private string jsonString; //string for getting data from the url
         public async Task<List<string>> FetchAsync(string url)
         {
