@@ -9,7 +9,7 @@ namespace KoshelnykTestTask
         {
             Label header = new Label //header
             {
-                //setting properties:
+                //setting header properties:
                 Text = "Выполняется загрузка стран",
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 HorizontalOptions = LayoutOptions.Center,
