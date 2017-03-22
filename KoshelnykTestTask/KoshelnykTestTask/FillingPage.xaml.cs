@@ -41,9 +41,6 @@ namespace KoshelnykTestTask
 
         public FillingPage()
         {
-            int selectedIndexChangedIssueFixed = 0;
-            int selectedIndexChangedIssueFixedCityField = 0;
-
             //setting header properties
             header.Text = "Заполните бланк";
             header.FontSize = 26;
@@ -69,28 +66,13 @@ namespace KoshelnykTestTask
 
             try
             {
-                //textChanged event of name entry
-                nameEntry.TextChanged += delegate
-                {
-                    selectedIndexChangedIssueFixed++;
-                    selectedIndexChangedIssueFixedCityField++;
-                };
-
                 //textChanged event of surnameEntry
                 surnameEntry.TextChanged += delegate
                 {
-                    if (String.IsNullOrEmpty(nameEntry.Text))
-                    //if name entry IsNullOrEmpty it displays the alert message
+                    if (String.IsNullOrEmpty(nameEntry.Text))//if name entry IsNullOrEmpty it displays the alert message
                     {
                         DisplayAlert("Внимание", "Введите имя", "OK"); //alert message
                         surnameEntry.Text = ""; //setting text
-                        selectedIndexChangedIssueFixed++;
-                        selectedIndexChangedIssueFixedCityField++;
-                    }
-                    else
-                    {
-                        selectedIndexChangedIssueFixed = 0;
-                        selectedIndexChangedIssueFixedCityField = 0;
                     }
                 };
 
@@ -100,14 +82,10 @@ namespace KoshelnykTestTask
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
                     //detecting if the previous fields are not empty
                     {
-                        if (selectedIndexChangedIssueFixed == 0)
                         {
                             DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
-                            selectedIndexChangedIssueFixedCityField++;
-                        }
-                        countryPicker.SelectedIndex = -1; //setting emty picker if the previous fields empty
-                        selectedIndexChangedIssueFixed++;
-                        selectedIndexChangedIssueFixedCityField = 0;
+                            countryPicker.SelectedIndex = -1;//setting empty picker if the previous fields empty
+                        } 
                     }
                     else
                     {
@@ -127,16 +105,12 @@ namespace KoshelnykTestTask
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
                         countryPicker.SelectedIndex == -1) //detecting if the previous fields are not empty
                     {
-                        if (selectedIndexChangedIssueFixedCityField == 0)
-                        {
-                            DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
-                            citySearchBar.Text = ""; //setting text
-                            selectedIndexChangedIssueFixedCityField++;
-                        }
+                        DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
+                        citySearchBar.Text = ""; 
                     }
                     else
                     {
-                        getCityTask();
+                        getCityTask();//method to retrieve city
                     }
                 };
 
