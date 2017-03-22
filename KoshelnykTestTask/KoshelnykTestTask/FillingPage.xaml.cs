@@ -74,9 +74,10 @@ namespace KoshelnykTestTask
                 //textChanged event of surnameEntry
                 surnameEntry.TextChanged += delegate
                 {
-                    if (String.IsNullOrEmpty(nameEntry.Text))//if name entry IsNullOrEmpty it displays the alert message
+                    if (String.IsNullOrEmpty(nameEntry.Text))
+                        //if name entry IsNullOrEmpty it displays the alert message
                     {
-                        if (preventTwiceFiringAlertSurname == 0)//construction to prevent twice-firing alert message
+                        if (preventTwiceFiringAlertSurname == 0) //construction to prevent twice-firing alert message
                         {
                             DisplayAlert("Внимание", "Введите имя", "OK"); //alert message
                             surnameEntry.Text = ""; //setting text
@@ -92,12 +93,13 @@ namespace KoshelnykTestTask
                 //SelectedIndexChanged event of countryPicker
                 countryPicker.SelectedIndexChanged += (sender, args) =>
                 {
-                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))//detecting if the previous fields are not empty
+                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
+                        //detecting if the previous fields are not empty
                     {
-                        if (preventTwiceFiringAlertCountry == 0)//construction to prevent twice-firing alert message
+                        if (preventTwiceFiringAlertCountry == 0) //construction to prevent twice-firing alert message
                         {
                             DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
-                            countryPicker.SelectedIndex = -1;//setting empty picker if the previous fields empty
+                            countryPicker.SelectedIndex = -1; //setting empty picker if the previous fields empty
                             preventTwiceFiringAlertCountry++;
                         }
                         else
@@ -123,7 +125,7 @@ namespace KoshelnykTestTask
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
                         countryPicker.SelectedIndex == -1) //detecting if the previous fields are not empty
                     {
-                        if (preventTwiceFiringAlertCity == 0)//construction to prevent twice-firing alert message
+                        if (preventTwiceFiringAlertCity == 0) //construction to prevent twice-firing alert message
                         {
                             DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
                             citySearchBar.Text = "";
@@ -136,7 +138,7 @@ namespace KoshelnykTestTask
                     }
                     else
                     {
-                        getCityTask();//method to retrieve city
+                        getCityTask(); //method to retrieve city
                     }
                 };
 
@@ -144,9 +146,10 @@ namespace KoshelnykTestTask
                 universitySearchBar.TextChanged += delegate
                 {
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
-                        countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))//detecting if the previous fields are not empty
+                        countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
+                        //detecting if the previous fields are not empty
                     {
-                        if (preventTwiceFiringAlertUniversity == 0)//construction to prevent twice-firing alert message
+                        if (preventTwiceFiringAlertUniversity == 0) //construction to prevent twice-firing alert message
                         {
                             DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
                             universitySearchBar.Text = ""; //setting text
@@ -178,7 +181,7 @@ namespace KoshelnykTestTask
                     if (e.SelectedItem == null) return; //don't do anything if we just de-selected the row
 
                     if (cityOrUniversityIndicator == "city")
-                    //if it is true the resource of listview will be list of cities
+                        //if it is true the resource of listview will be list of cities
                     {
                         chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
                         selectedCityId = gettingCity.retrievingChoosenCityId();
@@ -186,13 +189,13 @@ namespace KoshelnykTestTask
                         citySearchBar.Text = e.SelectedItem.ToString(); //setting text of the selected city
                     }
                     if (cityOrUniversityIndicator == "university")
-                    //if it is true the resource of listview will be list of universities
+                        //if it is true the resource of listview will be list of universities
                     {
                         university = e.SelectedItem.ToString(); //setting the value of chosen university
                         universitySearchBar.Text = e.SelectedItem.ToString(); //setting text of the selected university
                     }
 
-                    ((ListView)sender).SelectedItem = null; //de-select the row
+                    ((ListView) sender).SelectedItem = null; //de-select the row
                 };
 
                 //executeButton click event
@@ -240,7 +243,7 @@ namespace KoshelnykTestTask
                     }
                 };
             }
-            catch { }
+            catch{}
         }
 
         private void setPreviousValues()//filling fields if the user decides to repair some data
@@ -252,18 +255,20 @@ namespace KoshelnykTestTask
             universitySearchBar.Text = university;
         }
 
-        private async void getCityTask()
+        private async Task<bool> getCityTask()
         {
             var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id=" + selectedCountryId + "&q=" + citySearchBar.Text;//setting current url. the need_all=0 parameter means that the program gets only main cities
             GettingCity gettingCity = new GettingCity();//THIS needs to be here to prevent bugs
             await gettingCity.FetchAsync(url);//executing await method to get list of cities
             listView.ItemsSource = gettingCity.listOfCities;//setting list of cities as ItemsSource for the listView
+            return true;
         }
 
-        private async void getUniversityTask()
+        private async Task<bool> getUniversityTask()
         {
             var url = "https://api.vk.com/api.php?oauth=1&method=database.getUniversities&city_id=" + selectedCityId + "&q=" + universitySearchBar.Text;//setting current url
             listView.ItemsSource = await gettingUniversity.FetchAsync(url);//setting list of universities as ItemsSource for the listView
+            return true;
         }
     }
 }
