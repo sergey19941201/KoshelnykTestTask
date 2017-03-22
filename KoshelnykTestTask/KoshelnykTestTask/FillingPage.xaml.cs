@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,14 +12,17 @@ namespace KoshelnykTestTask
         public static string surname;
         public static string chosenCountryTitle;//variable to know the title of chosen country to find countryId
         public static string chosenCityTitle;//variable to know the title of chosen city to find university
-        private int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
-        private int selectedCityId;//this variable is used to find universities of the city that had been chosen before
+        public static string university;
+
+        public static bool returningToRepairData;
+
+        public static int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
+        public static int selectedCityId;//this variable is used to find universities of the city that had been chosen before
+
         private ListView listView = new ListView();//"drop-down" listview to choose cities or universities
         //private string partOfWord;//this string is used to get cities or universities by the part of its title
-        public static string university;
-        private string cityOrUniversityIndicator;
-        private SearchBar universitySearchBar = new SearchBar();
-        private SearchBar citySearchBar = new SearchBar();
+        
+        private static string cityOrUniversityIndicator;
 
         GettingCountry gettingCountry = new GettingCountry();
         GettingCity gettingCity = new GettingCity();
@@ -26,6 +30,9 @@ namespace KoshelnykTestTask
 
         private Entry nameEntry = new Entry();
         private Entry surnameEntry = new Entry();
+        private Picker countryPicker = new Picker();
+        private SearchBar universitySearchBar = new SearchBar();
+        private SearchBar citySearchBar = new SearchBar();
 
         public FillingPage()
         {
@@ -66,11 +73,8 @@ namespace KoshelnykTestTask
                 }
             };
 
-            Picker countryPicker = new Picker()
-            {
-                Title = "Страна",
-                VerticalOptions = LayoutOptions.Center,
-            };
+                countryPicker.Title = "Страна";
+                countryPicker.VerticalOptions = LayoutOptions.Center;
 
                 citySearchBar.Placeholder = "Город";
 
@@ -104,6 +108,7 @@ namespace KoshelnykTestTask
                     countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
                 {
                     DisplayAlert("Внимание", "Заполните все поля выше", "OK");
+                    universitySearchBar.Text = "";
                 }
                 else
                 {
@@ -182,15 +187,44 @@ namespace KoshelnykTestTask
             };
 
             executeButton.Clicked += async delegate
-             {
+            {
+                returningToRepairData = false;
                  //getUniversityTask();
                  name = nameEntry.Text;
                  surname = surnameEntry.Text;
+                 //countryPicker.SelectedIndex = 2;
+                 chosenCityTitle= citySearchBar.Text;
+                  university= universitySearchBar.Text;
                  await Navigation.PushAsync(new ResultPage());
              };
 
             // Accomodate iPhone status bar.
             this.Padding = new Thickness(10, Device.OnPlatform(20, 0, 0), 10, 5);
+
+
+
+
+
+
+
+
+
+            if (returningToRepairData == true)
+            {
+                nameEntry.Text = name;
+                surnameEntry.Text = surname;
+                countryPicker.SelectedIndex = 2;
+                citySearchBar.Text = chosenCityTitle;
+                universitySearchBar.Text = university;
+            }
+
+
+
+
+
+
+
+
 
             // Build the page.
             this.Content = new StackLayout
@@ -207,6 +241,11 @@ namespace KoshelnykTestTask
                     executeButton
                 }
             };
+        }
+
+        public async Task<bool> setPreviousValues()
+        {
+            return true;
         }
 
         private async void getCityTask()
