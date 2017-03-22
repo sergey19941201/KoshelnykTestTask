@@ -1,4 +1,4 @@
-﻿using System.Runtime.Remoting.Channels;
+﻿using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -26,6 +26,9 @@ namespace KoshelnykTestTask
 
         public FillingPage()
         {
+            int selectedIndexChangedIssueFixed = 0; 
+                int selectedIndexChangedIssueFixedCityField = 0;
+
             Label header = new Label
             {
                 Text = "Заполните бланк",
@@ -37,6 +40,27 @@ namespace KoshelnykTestTask
 
             nameEntry.Placeholder = "Имя";
             surnameEntry.Placeholder = "Фамилия";
+
+            nameEntry.TextChanged += delegate
+            {
+                selectedIndexChangedIssueFixed++;
+                selectedIndexChangedIssueFixedCityField++;
+            };
+
+            surnameEntry.TextChanged += delegate
+            {
+                if (String.IsNullOrEmpty(nameEntry.Text))
+                {
+                    DisplayAlert("Внимание", "Введите имя", "OK");
+                    selectedIndexChangedIssueFixed++;
+                    selectedIndexChangedIssueFixedCityField++;
+                }
+                else
+                {
+                    selectedIndexChangedIssueFixed = 0;
+                    selectedIndexChangedIssueFixedCityField = 0;
+                }
+            };
 
             Picker countryPicker = new Picker()
             {
@@ -52,9 +76,21 @@ namespace KoshelnykTestTask
             citySearchBar.TextChanged += delegate
             {
                 //listView.ItemsSource = GettingCountry.listOfCountries;
-
-                partOfWord = citySearchBar.Text;
-                getCity();
+                if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
+                    countryPicker.SelectedIndex == -1)
+                {
+                    if (selectedIndexChangedIssueFixedCityField == 0)
+                    {
+                        DisplayAlert("Внимание", "Заполните все поля выше", "OK");
+                        citySearchBar.Text = "";
+                        selectedIndexChangedIssueFixedCityField++;
+                    }
+                }
+                else
+                {
+                    partOfWord = citySearchBar.Text;
+                    getCity();
+                }
             };
 
             SearchBar universitySearchBar = new SearchBar()
@@ -62,10 +98,26 @@ namespace KoshelnykTestTask
                 Placeholder = "Университет"
             };
 
+
             countryPicker.SelectedIndexChanged += (sender, args) =>
             {
-                chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
-                selectedCountryId = gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all the cities of it 
+                if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
+                {
+                    if (selectedIndexChangedIssueFixed == 0)
+                    {
+                        DisplayAlert("Внимание", "Заполните все поля выше", "OK");
+                        selectedIndexChangedIssueFixedCityField++;
+                    }
+                    countryPicker.SelectedIndex = -1;
+                    selectedIndexChangedIssueFixed++;
+                    selectedIndexChangedIssueFixedCityField = 0;
+                }
+                else
+                {
+                    chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
+                    selectedCountryId = gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all the cities of it 
+                }
+
             };
 
             foreach (var country in GettingCountry.listOfCountries)
@@ -85,13 +137,17 @@ namespace KoshelnykTestTask
             };*/
             listView.SeparatorColor = Color.Blue;//setting separator color
 
-            listView.ItemSelected += (sender, e) =>
-            {
-                if (e.SelectedItem == null) return; // don't do anything if we just de-selected the row
-                chosenCityTitle = e.SelectedItem.ToString();//setting the value of chosen city
-                selectedCityId = gettingCity.retrievingChoosenCityId();//setting the id of chosen city by calling method to find all the universities of it 
+           listView.ItemSelected += (sender, e) =>
+           {
+
+               if (e.SelectedItem == null) return; // don't do anything if we just de-selected the row
+
+                chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
+                selectedCityId = gettingCity.retrievingChoosenCityId();
+                //setting the id of chosen city by calling method to find all the universities of it 
                 citySearchBar.Text = e.SelectedItem.ToString();
-                ((ListView)sender).SelectedItem = null; // de-select the row
+
+               ((ListView)sender).SelectedItem = null; // de-select the row
             };
 
 
