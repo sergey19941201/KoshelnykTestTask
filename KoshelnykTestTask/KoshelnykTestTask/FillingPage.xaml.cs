@@ -161,10 +161,10 @@ namespace KoshelnykTestTask
 
             executeButton.Clicked += async delegate
              {
-                 //getUniversityTask();
+                 getUniversityTask();
                  name = nameEntry.Text;
                  surname = surnameEntry.Text;
-                 await Navigation.PushAsync(new ResultPage());
+                 //await Navigation.PushAsync(new ResultPage());
              };
 
             // Accomodate iPhone status bar.
