@@ -5,45 +5,40 @@ namespace KoshelnykTestTask
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ResultPage : ContentPage
-    { 
-        FillingPage fillingPage = new FillingPage();
+    {
+        //declaring the elements
+        private Label header = new Label();
+        private Label resultLabel = new Label();
+        private Button backButton = new Button();
         public ResultPage()
         {
-            Label header = new Label
-            {
-                Text = "Данные бланка",
-                FontSize = 26,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.StartAndExpand,
-                TextColor = Color.Blue,
-            };
-
-            Label resultLabel = new Label
-            {
-                Text =
-                "Имя: " + FillingPage.name+ 
-                "\nФамилия: " + FillingPage.surname+
-                "\nСтрана: " + FillingPage.chosenCountryTitle+
-                "\nГород: " + FillingPage.chosenCityTitle+
-                "\nУниверситет: " + FillingPage.university,
-                FontSize = 22,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Center,
-                TextColor = Color.Navy,
-            };
-
-            Button backButton = new Button()
-            {
-                TextColor = Color.Green,
-                Text = "Назад",
-                FontSize = 22,
-                VerticalOptions = LayoutOptions.EndAndExpand,
-            };
-
+            //setting properties to header
+            header.Text = "Данные бланка";
+            header.FontSize = 26;
+            header.HorizontalOptions = LayoutOptions.Center;
+            header.VerticalOptions = LayoutOptions.StartAndExpand;
+            header.TextColor = Color.Blue;
+            //setting properties to resultLabel
+            resultLabel.Text =
+                "Имя: " + FillingPage.name +
+                "\nФамилия: " + FillingPage.surname +
+                "\nСтрана: " + FillingPage.chosenCountryTitle +
+                "\nГород: " + FillingPage.chosenCityTitle +
+                "\nУниверситет: " + FillingPage.university;
+            resultLabel.FontSize = 22;
+            resultLabel.HorizontalOptions = LayoutOptions.Center;
+            resultLabel.VerticalOptions = LayoutOptions.Center;
+            resultLabel.TextColor = Color.Navy;
+            //setting properties to button
+            backButton.TextColor = Color.Green;
+            backButton.Text = "Назад";
+            backButton.FontSize = 22;
+            backButton.VerticalOptions = LayoutOptions.EndAndExpand;
+            //button clicked event
             backButton.Clicked += async delegate
             {
-                FillingPage.returningToRepairData = true;
-               await Navigation.PushAsync(new FillingPage());
+                FillingPage.returningToRepairData = true;//varaiable to know that the user decided to repair some data. If it true, it automatically fills textFields
+                await Navigation.PushAsync(new FillingPage());//starting FillingPage
             };
 
             // Accomodate iPhone status bar.
