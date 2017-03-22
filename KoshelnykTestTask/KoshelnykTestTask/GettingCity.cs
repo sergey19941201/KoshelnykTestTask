@@ -22,7 +22,7 @@ namespace KoshelnykTestTask
             }
             
             var responseCities = JArray.Parse(JObject.Parse(jsonString)["response"].ToString());//parsing data from jsonstring
-
+            
             foreach (var cityInResponse in responseCities)//the foreach-loop
             {
                 var rootObject = new RootObject((int)cityInResponse["cid"],(string)cityInResponse["title"]);
@@ -33,13 +33,13 @@ namespace KoshelnykTestTask
             return listOfCitiesRoot;//returned list
         }
 
-        public int retrievingChoosenCityId()
+        public int retrievingChoosenCityId()//uses to retrieve id of the pressed city to retrieve universities of this city
         {
-            foreach (var item in listOfCitiesRoot)
+            foreach (var item in listOfCitiesRoot)//foreach loop to compare item title of the city with pressed title of the city
             {
                 if (item.Title == FillingPage.chosenCityTitle)
                 {
-                    return item.Id;
+                    return item.Id;//retrieving needed id of the city
                 }
             };
             return 0;

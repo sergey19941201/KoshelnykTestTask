@@ -31,13 +31,13 @@ namespace KoshelnykTestTask
             return listOfCountries;//returned list
         }
 
-        public int retrievingChoosenCountryId()
+        public int retrievingChoosenCountryId()//uses to retrieve id of the pressed country to retrieve cities of this country
         {
-            foreach (var item in listOfCountries)
+            foreach (var item in listOfCountries)//foreach loop to compare item title of the country with pressed title of the country
             {
                 if (item.Title == FillingPage.chosenCountryTitle)
                 {
-                    return item.Id;
+                    return item.Id;//retrieving needed id of the country
                 }
             };
             return 0;

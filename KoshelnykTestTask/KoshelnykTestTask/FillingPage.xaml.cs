@@ -8,266 +8,255 @@ namespace KoshelnykTestTask
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class FillingPage : ContentPage
     {
-        public static string name;
-        public static string surname;
+        public static string name;//user name
+        public static string surname;//user surname
         public static string chosenCountryTitle;//variable to know the title of chosen country to find countryId
         public static string chosenCityTitle;//variable to know the title of chosen city to find university
-        public static string university;
+        public static string university;//university
 
-        public static bool returningToRepairData;
-        public static int selectedCountryIx;
+        public static bool returningToRepairDataIndicator;//this uses for detecting programmatically in case the user returns this page to repair the data
+        public static int selectedCountryIx;//this is the index of selected country from a picker to set the country by default if he wants to repair his data
         public static int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
         public static int selectedCityId;//this variable is used to find universities of the city that had been chosen before
 
         private ListView listView = new ListView();//"drop-down" listview to choose cities or universities
-        //private string partOfWord;//this string is used to get cities or universities by the part of its title
-        
+
+        //cityOrUniversityIndicator is used for detecting programmatically what resource for listView must be used. (list of cities or list of universities) 
         private static string cityOrUniversityIndicator;
 
-        GettingCountry gettingCountry = new GettingCountry();
-        GettingCity gettingCity = new GettingCity();
-        GettingUniversity gettingUniversity = new GettingUniversity();
-
+        //declaring the page elements
+        private Label header = new Label();
         private Entry nameEntry = new Entry();
         private Entry surnameEntry = new Entry();
         private Picker countryPicker = new Picker();
-        private SearchBar universitySearchBar = new SearchBar();
         private SearchBar citySearchBar = new SearchBar();
+        private SearchBar universitySearchBar = new SearchBar();
+        private Button executeButton = new Button();
+
+        //declaring classes which are used for parsing data from url
+        private GettingCountry gettingCountry = new GettingCountry();
+        private GettingCity gettingCity = new GettingCity();
+        private GettingUniversity gettingUniversity = new GettingUniversity();
+
 
         public FillingPage()
         {
             int selectedIndexChangedIssueFixed = 0;
             int selectedIndexChangedIssueFixedCityField = 0;
 
-            Label header = new Label
-            {
-                Text = "Заполните бланк",
-                FontSize = 26,
-                HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                TextColor = Color.Blue
-            };
+            //setting header properties
+            header.Text = "Заполните бланк";
+            header.FontSize = 26;
+            header.HorizontalOptions = LayoutOptions.Center;
+            header.VerticalOptions = LayoutOptions.CenterAndExpand;
+            header.TextColor = Color.Blue;
 
+            //setting name and surname entry placeholders
             nameEntry.Placeholder = "Имя";
             surnameEntry.Placeholder = "Фамилия";
 
-            nameEntry.TextChanged += delegate
-            {
-                selectedIndexChangedIssueFixed++;
-                selectedIndexChangedIssueFixedCityField++;
-            };
+            //setting countryPicker properties
+            countryPicker.Title = "Страна";
+            countryPicker.VerticalOptions = LayoutOptions.Center;
 
-            surnameEntry.TextChanged += delegate
+            citySearchBar.Placeholder = "Город";//setting citySearchBar placeholder
+            universitySearchBar.Placeholder = "Университет";//setting universitySearchBar placeholder
+
+            //execute button properties
+            executeButton.TextColor = Color.Green;
+            executeButton.Text = "Выполнить";
+            executeButton.FontSize = 22;
+
+            try
             {
-                if (String.IsNullOrEmpty(nameEntry.Text))
+                //textChanged event of name entry
+                nameEntry.TextChanged += delegate
                 {
-                    DisplayAlert("Внимание", "Введите имя", "OK");
-                    surnameEntry.Text = "";
                     selectedIndexChangedIssueFixed++;
                     selectedIndexChangedIssueFixedCityField++;
-                }
-                else
+                };
+
+                //textChanged event of surnameEntry
+                surnameEntry.TextChanged += delegate
                 {
-                    selectedIndexChangedIssueFixed = 0;
-                    selectedIndexChangedIssueFixedCityField = 0;
-                }
-            };
-
-                countryPicker.Title = "Страна";
-                countryPicker.VerticalOptions = LayoutOptions.Center;
-
-                citySearchBar.Placeholder = "Город";
-
-            citySearchBar.TextChanged += delegate
-            {
-                cityOrUniversityIndicator = "city";
-                //listView.ItemsSource = GettingCountry.listOfCountries;
-                if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
-                    countryPicker.SelectedIndex == -1)
-                {
-                    if (selectedIndexChangedIssueFixedCityField == 0)
+                    if (String.IsNullOrEmpty(nameEntry.Text))
+                    //if name entry IsNullOrEmpty it displays the alert message
                     {
-                        DisplayAlert("Внимание", "Заполните все поля выше", "OK");
-                        citySearchBar.Text = "";
+                        DisplayAlert("Внимание", "Введите имя", "OK"); //alert message
+                        surnameEntry.Text = ""; //setting text
+                        selectedIndexChangedIssueFixed++;
                         selectedIndexChangedIssueFixedCityField++;
                     }
-                }
-                else
-                {
-                   // partOfWord = citySearchBar.Text;
-                    getCityTask();
-                }
-            };
-
-
-            universitySearchBar.Placeholder = "Университет";
-
-            universitySearchBar.TextChanged += delegate
-            {
-                if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
-                    countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
-                {
-                    DisplayAlert("Внимание", "Заполните все поля выше", "OK");
-                    universitySearchBar.Text = "";
-                }
-                else
-                {
-                    cityOrUniversityIndicator = "university";
-                    // partOfWord = citySearchBar.Text;
-                    getUniversityTask(); //getting the universities
-                }
-            };
-
-            countryPicker.SelectedIndexChanged += (sender, args) =>
-            {
-                if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
-                {
-                    if (selectedIndexChangedIssueFixed == 0)
+                    else
                     {
-                        DisplayAlert("Внимание", "Заполните все поля выше", "OK");
-                        selectedIndexChangedIssueFixedCityField++;
+                        selectedIndexChangedIssueFixed = 0;
+                        selectedIndexChangedIssueFixedCityField = 0;
                     }
-                    countryPicker.SelectedIndex = -1;
-                    selectedIndexChangedIssueFixed++;
-                    selectedIndexChangedIssueFixedCityField = 0;
-                }
-                else
+                };
+
+                //SelectedIndexChanged event of countryPicker
+                countryPicker.SelectedIndexChanged += (sender, args) =>
                 {
-                    chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
-                    selectedCountryIx = countryPicker.SelectedIndex;
-                    selectedCountryId = gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all the cities of it 
+                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
+                    //detecting if the previous fields are not empty
+                    {
+                        if (selectedIndexChangedIssueFixed == 0)
+                        {
+                            DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
+                            selectedIndexChangedIssueFixedCityField++;
+                        }
+                        countryPicker.SelectedIndex = -1; //setting emty picker if the previous fields empty
+                        selectedIndexChangedIssueFixed++;
+                        selectedIndexChangedIssueFixedCityField = 0;
+                    }
+                    else
+                    {
+                        chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];
+                        //setting the value of chosen country
+                        selectedCountryIx = countryPicker.SelectedIndex;
+                        //setting the index of counry in picker to set the counry if the user will return to repair this page
+                        selectedCountryId = gettingCountry.retrievingChoosenCountryId();
+                        //setting the id of chosen country by calling method to find all the cities of it 
+                    }
+                };
+
+                //textChanged event of citySearchBar
+                citySearchBar.TextChanged += delegate
+                {
+                    cityOrUniversityIndicator = "city"; //setting cityOrUniversityIndicator for listview recource
+                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
+                        countryPicker.SelectedIndex == -1) //detecting if the previous fields are not empty
+                    {
+                        if (selectedIndexChangedIssueFixedCityField == 0)
+                        {
+                            DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
+                            citySearchBar.Text = ""; //setting text
+                            selectedIndexChangedIssueFixedCityField++;
+                        }
+                    }
+                    else
+                    {
+                        getCityTask();
+                    }
+                };
+
+                //textChanged event of universitySearchBar
+                universitySearchBar.TextChanged += delegate
+                {
+                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
+                        countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
+                    //detecting if the previous fields are not empty
+                    {
+                        DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
+                        universitySearchBar.Text = ""; //setting text
+                    }
+                    else
+                    {
+                        cityOrUniversityIndicator = "university";
+                        //setting cityOrUniversityIndicator for listview recource
+                        getUniversityTask(); //getting the universities
+                    }
+                };
+
+                foreach (var country in GettingCountry.listOfCountries) //foreach loop for countries
+                {
+                    countryPicker.Items.Add(country.Title); //adding countries to the picker
                 }
 
-            };
+                listView.SeparatorColor = Color.Blue; //setting separator color for listView
 
-            foreach (var country in GettingCountry.listOfCountries)
-            {
-                countryPicker.Items.Add(country.Title);
+                //ItemSelected event of listView
+                listView.ItemSelected += (sender, e) =>
+                {
+                    if (e.SelectedItem == null) return; //don't do anything if we just de-selected the row
+
+                    if (cityOrUniversityIndicator == "city")
+                    //if it is true the resource of listview will be list of cities
+                    {
+                        chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
+                        selectedCityId = gettingCity.retrievingChoosenCityId();
+                        //setting the id of chosen city by calling method to find all the universities of it 
+                        citySearchBar.Text = e.SelectedItem.ToString(); //setting text of the selected city
+                    }
+                    if (cityOrUniversityIndicator == "university")
+                    //if it is true the resource of listview will be list of universities
+                    {
+                        university = e.SelectedItem.ToString(); //setting the value of chosen university
+                        universitySearchBar.Text = e.SelectedItem.ToString(); //setting text of the selected university
+                    }
+
+                    ((ListView)sender).SelectedItem = null; //de-select the row
+                };
+
+                //executeButton click event
+                executeButton.Clicked += async delegate
+                {
+                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
+                        countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text) ||
+                        String.IsNullOrEmpty(universitySearchBar.Text)) //detecting if the previous fields are not empty
+                    {
+                        DisplayAlert("Внимание", "Заполните все поля", "OK"); //displaying alert
+                    }
+                    else
+                    {
+                        //Assignment field values to variables
+                        name = nameEntry.Text;
+                        surname = surnameEntry.Text;
+                        chosenCityTitle = citySearchBar.Text;
+                        university = universitySearchBar.Text;
+                        await Navigation.PushAsync(new ResultPage());
+                    }
+                };
+
+                // Accomodate iPhone status bar.
+                this.Padding = new Thickness(10, Device.OnPlatform(20, 0, 0), 10, 5);
+
+                //if the user decides to repair some data
+                if (returningToRepairDataIndicator == true)
+                {
+                    setPreviousValues(); //filling fields if the user decides to repair some data
+                }
+
+                // Build the page.
+                this.Content = new StackLayout
+                {
+                    Children =
+                    {
+                        header,
+                        nameEntry,
+                        surnameEntry,
+                        countryPicker,
+                        citySearchBar,
+                        universitySearchBar,
+                        listView,
+                        executeButton
+                    }
+                };
             }
-
-            /*foreach (string country in GettingCountry.CountriesList)
-            {
-                //countryPicker.Items.Add(country);
-            }*/
-
-
-            /*{
-                // Source of data items.
-                //ItemsSource = GettingCountry.CountriesList
-            };*/
-            listView.SeparatorColor = Color.Blue;//setting separator color
-
-            listView.ItemSelected += (sender, e) =>
-            {
-               if (e.SelectedItem == null) return; // don't do anything if we just de-selected the row
-
-
-                if (cityOrUniversityIndicator == "city")
-                {
-                    chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
-                    selectedCityId = gettingCity.retrievingChoosenCityId();
-                    //setting the id of chosen city by calling method to find all the universities of it 
-                    citySearchBar.Text = e.SelectedItem.ToString();
-                }
-                if (cityOrUniversityIndicator == "university")
-                {
-                    university= e.SelectedItem.ToString();
-                    universitySearchBar.Text= e.SelectedItem.ToString();
-                }
-
-                ((ListView)sender).SelectedItem = null; // de-select the row
-            };
-
-
-
-            Button executeButton = new Button()
-            {
-                TextColor = Color.Green,
-                Text = "Выполнить",
-                FontSize = 22
-            };
-
-            executeButton.Clicked += async delegate
-            {
-                returningToRepairData = false;
-                 //getUniversityTask();
-                 name = nameEntry.Text;
-                 surname = surnameEntry.Text;
-                 //countryPicker.SelectedIndex = 2;
-                 chosenCityTitle= citySearchBar.Text;
-                  university= universitySearchBar.Text;
-                 await Navigation.PushAsync(new ResultPage());
-             };
-
-            // Accomodate iPhone status bar.
-            this.Padding = new Thickness(10, Device.OnPlatform(20, 0, 0), 10, 5);
-
-
-
-
-
-
-
-
-
-            if (returningToRepairData == true)
-            {
-                nameEntry.Text = name;
-                surnameEntry.Text = surname;
-                countryPicker.SelectedIndex = selectedCountryIx;
-                citySearchBar.Text = chosenCityTitle;
-                universitySearchBar.Text = university;
-            }
-
-
-
-
-
-
-
-
-
-            // Build the page.
-            this.Content = new StackLayout
-            {
-                Children =
-                {
-                    header,
-                    nameEntry,
-                    surnameEntry,
-                    countryPicker,
-                    citySearchBar,
-                    universitySearchBar,
-                    listView,
-                    executeButton
-                }
-            };
+            catch { }
         }
 
-        public async Task<bool> setPreviousValues()
+        private void setPreviousValues()//filling fields if the user decides to repair some data
         {
-            return true;
+            nameEntry.Text = name;
+            surnameEntry.Text = surname;
+            countryPicker.SelectedIndex = selectedCountryIx;
+            citySearchBar.Text = chosenCityTitle;
+            universitySearchBar.Text = university;
         }
 
         private async void getCityTask()
         {
-            //need_all=0 that means that we get only main cities
-            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id=" + selectedCountryId + "&q=" + citySearchBar.Text;
-            GettingCity gettingCity = new GettingCity();
-            await gettingCity.FetchAsync(url);
-            listView.ItemsSource = gettingCity.listOfCities;
-            //await MainPage.Navigation.PushAsync(new FillingPage());
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getCities&need_all=0&Count=1000&country_id=" + selectedCountryId + "&q=" + citySearchBar.Text;//setting current url. the need_all=0 parameter means that the program gets only main cities
+            GettingCity gettingCity = new GettingCity();//THIS needs to be here to prevent bugs
+            await gettingCity.FetchAsync(url);//executing await method to get list of cities
+            listView.ItemsSource = gettingCity.listOfCities;//setting list of cities as ItemsSource for the listView
         }
 
         private async void getUniversityTask()
         {
-            //need_all=0 that means that we get only main cities
-            var url = "https://api.vk.com/api.php?oauth=1&method=database.getUniversities&city_id=" + selectedCityId+"&q="+ universitySearchBar.Text;
-            //var url = "https://api.vk.com/api.php?oauth=1&method=database.getCountries&v=5.5&need_all=1&count=236";
-            //GettingCity gettingCity = new GettingCity();
-            listView.ItemsSource = await gettingUniversity.FetchAsync(url);
-            // gettingUniversity.listOfUniversities;
-            //await MainPage.Navigation.PushAsync(new FillingPage());
+            var url = "https://api.vk.com/api.php?oauth=1&method=database.getUniversities&city_id=" + selectedCityId + "&q=" + universitySearchBar.Text;//setting current url
+            listView.ItemsSource = await gettingUniversity.FetchAsync(url);//setting list of universities as ItemsSource for the listView
         }
     }
 }

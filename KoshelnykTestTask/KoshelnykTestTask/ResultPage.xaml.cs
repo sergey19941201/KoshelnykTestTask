@@ -6,7 +6,7 @@ namespace KoshelnykTestTask
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ResultPage : ContentPage
     {
-        //declaring the elements
+        //declaring the page elements
         private Label header = new Label();
         private Label resultLabel = new Label();
         private Button backButton = new Button();
@@ -31,13 +31,13 @@ namespace KoshelnykTestTask
             resultLabel.TextColor = Color.Navy;
             //setting properties to button
             backButton.TextColor = Color.Green;
-            backButton.Text = "Назад";
+            backButton.Text = "Редактировать";
             backButton.FontSize = 22;
             backButton.VerticalOptions = LayoutOptions.EndAndExpand;
             //button clicked event
             backButton.Clicked += async delegate
             {
-                FillingPage.returningToRepairData = true;//varaiable to know that the user decided to repair some data. If it true, it automatically fills textFields
+                FillingPage.returningToRepairDataIndicator = true;//varaiable to know that the user decided to repair some data. If it true, it automatically fills textFields
                 await Navigation.PushAsync(new FillingPage());//starting FillingPage
             };
 
