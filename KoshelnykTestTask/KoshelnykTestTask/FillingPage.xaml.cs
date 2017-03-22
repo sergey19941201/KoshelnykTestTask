@@ -15,7 +15,7 @@ namespace KoshelnykTestTask
         public static string university;
 
         public static bool returningToRepairData;
-
+        public static int selectedCountryIx;
         public static int selectedCountryId;//this variable is used to find cities of the country that had been chosen before
         public static int selectedCityId;//this variable is used to find universities of the city that had been chosen before
 
@@ -134,6 +134,7 @@ namespace KoshelnykTestTask
                 else
                 {
                     chosenCountryTitle = countryPicker.Items[countryPicker.SelectedIndex];//setting the value of chosen country
+                    selectedCountryIx = countryPicker.SelectedIndex;
                     selectedCountryId = gettingCountry.retrievingChoosenCountryId();//setting the id of chosen country by calling method to find all the cities of it 
                 }
 
@@ -213,7 +214,7 @@ namespace KoshelnykTestTask
             {
                 nameEntry.Text = name;
                 surnameEntry.Text = surname;
-                countryPicker.SelectedIndex = 2;
+                countryPicker.SelectedIndex = selectedCountryIx;
                 citySearchBar.Text = chosenCityTitle;
                 universitySearchBar.Text = university;
             }

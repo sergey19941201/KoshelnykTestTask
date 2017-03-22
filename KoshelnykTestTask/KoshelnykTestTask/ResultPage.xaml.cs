@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace KoshelnykTestTask
@@ -61,11 +55,6 @@ namespace KoshelnykTestTask
                 Children =
                 {
                     header,
-                    /*nameLabel,
-                    surnameLabel,
-                    countryLabel,
-                    cityLabel,
-                    universityLabel,*/
                     resultLabel,
                     backButton
                 }
