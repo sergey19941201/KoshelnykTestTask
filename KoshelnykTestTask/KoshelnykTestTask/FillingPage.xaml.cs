@@ -66,26 +66,44 @@ namespace KoshelnykTestTask
 
             try
             {
+                //declaring variables to prevent twice-firing alert message
+                int preventTwiceFiringAlertSurname = 0;
+                int preventTwiceFiringAlertCountry = 0;
+                int preventTwiceFiringAlertCity = 0;
+                int preventTwiceFiringAlertUniversity = 0;
                 //textChanged event of surnameEntry
                 surnameEntry.TextChanged += delegate
                 {
                     if (String.IsNullOrEmpty(nameEntry.Text))//if name entry IsNullOrEmpty it displays the alert message
                     {
-                        DisplayAlert("Внимание", "Введите имя", "OK"); //alert message
-                        surnameEntry.Text = ""; //setting text
+                        if (preventTwiceFiringAlertSurname == 0)//construction to prevent twice-firing alert message
+                        {
+                            DisplayAlert("Внимание", "Введите имя", "OK"); //alert message
+                            surnameEntry.Text = ""; //setting text
+                            preventTwiceFiringAlertSurname++;
+                        }
+                        else
+                        {
+                            preventTwiceFiringAlertSurname = 0;
+                        }
                     }
                 };
 
                 //SelectedIndexChanged event of countryPicker
                 countryPicker.SelectedIndexChanged += (sender, args) =>
                 {
-                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
-                    //detecting if the previous fields are not empty
+                    if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))//detecting if the previous fields are not empty
                     {
+                        if (preventTwiceFiringAlertCountry == 0)//construction to prevent twice-firing alert message
                         {
                             DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
                             countryPicker.SelectedIndex = -1;//setting empty picker if the previous fields empty
-                        } 
+                            preventTwiceFiringAlertCountry++;
+                        }
+                        else
+                        {
+                            preventTwiceFiringAlertCountry = 0;
+                        }
                     }
                     else
                     {
@@ -105,8 +123,16 @@ namespace KoshelnykTestTask
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
                         countryPicker.SelectedIndex == -1) //detecting if the previous fields are not empty
                     {
-                        DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
-                        citySearchBar.Text = ""; 
+                        if (preventTwiceFiringAlertCity == 0)//construction to prevent twice-firing alert message
+                        {
+                            DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
+                            citySearchBar.Text = "";
+                            preventTwiceFiringAlertCity++;
+                        }
+                        else
+                        {
+                            preventTwiceFiringAlertCity = 0;
+                        }
                     }
                     else
                     {
@@ -118,11 +144,18 @@ namespace KoshelnykTestTask
                 universitySearchBar.TextChanged += delegate
                 {
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
-                        countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
-                    //detecting if the previous fields are not empty
+                        countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))//detecting if the previous fields are not empty
                     {
-                        DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
-                        universitySearchBar.Text = ""; //setting text
+                        if (preventTwiceFiringAlertUniversity == 0)//construction to prevent twice-firing alert message
+                        {
+                            DisplayAlert("Внимание", "Заполните все поля выше", "OK"); //displaying alert
+                            universitySearchBar.Text = ""; //setting text
+                            preventTwiceFiringAlertUniversity++;
+                        }
+                        else
+                        {
+                            preventTwiceFiringAlertUniversity = 0;
+                        }
                     }
                     else
                     {
