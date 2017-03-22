@@ -14,6 +14,7 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		KoshelnykTestTask\KoshelnykTestTask\KoshelnykTestTask.projitems*{32c5ef33-efbd-4dab-b42a-73b35431c210}*SharedItemsImports = 4
+		KoshelnykTestTask\KoshelnykTestTask\KoshelnykTestTask.projitems*{54453276-6bd1-4953-9966-1dae63c420e6}*SharedItemsImports = 4
 		KoshelnykTestTask\KoshelnykTestTask\KoshelnykTestTask.projitems*{78de8429-0b38-4e65-808b-4087e59f3765}*SharedItemsImports = 4
 		KoshelnykTestTask\KoshelnykTestTask\KoshelnykTestTask.projitems*{91c21f7e-31a3-45ad-9bf2-7a7737a77957}*SharedItemsImports = 13
 	EndGlobalSection
