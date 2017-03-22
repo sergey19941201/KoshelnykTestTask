@@ -18,7 +18,7 @@ namespace KoshelnykTestTask
                 StreamReader reader = new StreamReader(stream);
                 jsonString = reader.ReadToEnd();
             }
-            
+
             var responseCountries = JArray.Parse(JObject.Parse(jsonString)["response"]["items"].ToString());//parsing data from jsonstring
 
             foreach (var countryInResponse in responseCountries)//the foreach-loop
@@ -26,7 +26,7 @@ namespace KoshelnykTestTask
                 var rootObject = new RootObject((int)countryInResponse["id"], (string)countryInResponse["title"]);
                 listOfCountries.Add(rootObject);//here the program adds Id and Title of each country to the list
             }
-            
+
             return listOfCountries;//returned list
         }
 

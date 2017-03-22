@@ -75,7 +75,7 @@ namespace KoshelnykTestTask
                 surnameEntry.TextChanged += delegate
                 {
                     if (String.IsNullOrEmpty(nameEntry.Text))
-                        //if name entry IsNullOrEmpty it displays the alert message
+                    //if name entry IsNullOrEmpty it displays the alert message
                     {
                         if (preventTwiceFiringAlertSurname == 0) //construction to prevent twice-firing alert message
                         {
@@ -94,7 +94,7 @@ namespace KoshelnykTestTask
                 countryPicker.SelectedIndexChanged += (sender, args) =>
                 {
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text))
-                        //detecting if the previous fields are not empty
+                    //detecting if the previous fields are not empty
                     {
                         if (preventTwiceFiringAlertCountry == 0) //construction to prevent twice-firing alert message
                         {
@@ -147,7 +147,7 @@ namespace KoshelnykTestTask
                 {
                     if (String.IsNullOrEmpty(surnameEntry.Text) || String.IsNullOrEmpty(nameEntry.Text) ||
                         countryPicker.SelectedIndex == -1 || String.IsNullOrEmpty(citySearchBar.Text))
-                        //detecting if the previous fields are not empty
+                    //detecting if the previous fields are not empty
                     {
                         if (preventTwiceFiringAlertUniversity == 0) //construction to prevent twice-firing alert message
                         {
@@ -181,7 +181,7 @@ namespace KoshelnykTestTask
                     if (e.SelectedItem == null) return; //don't do anything if we just de-selected the row
 
                     if (cityOrUniversityIndicator == "city")
-                        //if it is true the resource of listview will be list of cities
+                    //if it is true the resource of listview will be list of cities
                     {
                         chosenCityTitle = e.SelectedItem.ToString(); //setting the value of chosen city
                         selectedCityId = gettingCity.retrievingChoosenCityId();
@@ -189,13 +189,13 @@ namespace KoshelnykTestTask
                         citySearchBar.Text = e.SelectedItem.ToString(); //setting text of the selected city
                     }
                     if (cityOrUniversityIndicator == "university")
-                        //if it is true the resource of listview will be list of universities
+                    //if it is true the resource of listview will be list of universities
                     {
                         university = e.SelectedItem.ToString(); //setting the value of chosen university
                         universitySearchBar.Text = e.SelectedItem.ToString(); //setting text of the selected university
                     }
 
-                    ((ListView) sender).SelectedItem = null; //de-select the row
+                    ((ListView)sender).SelectedItem = null; //de-select the row
                 };
 
                 //executeButton click event
@@ -243,7 +243,7 @@ namespace KoshelnykTestTask
                     }
                 };
             }
-            catch{}
+            catch { }
         }
 
         private void setPreviousValues()//filling fields if the user decides to repair some data

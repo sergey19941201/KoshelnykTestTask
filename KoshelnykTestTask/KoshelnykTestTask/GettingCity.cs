@@ -20,16 +20,16 @@ namespace KoshelnykTestTask
                 StreamReader reader = new StreamReader(stream);
                 jsonString = reader.ReadToEnd();
             }
-            
+
             var responseCities = JArray.Parse(JObject.Parse(jsonString)["response"].ToString());//parsing data from jsonstring
-            
+
             foreach (var cityInResponse in responseCities)//the foreach-loop
             {
-                var rootObject = new RootObject((int)cityInResponse["cid"],(string)cityInResponse["title"]);
+                var rootObject = new RootObject((int)cityInResponse["cid"], (string)cityInResponse["title"]);
                 listOfCitiesRoot.Add(rootObject);//here the program adds Id and Title of each city to the list
                 listOfCities.Add(rootObject.Title);//adding to the list with names of the cities
             }
-            
+
             return listOfCitiesRoot;//returned list
         }
 
